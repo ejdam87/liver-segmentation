@@ -13,6 +13,7 @@ def get_image(path: str) -> torch.tensor:
     transform = transforms.ToTensor()
     return transform(im)
 
+# TODO -> try image patching and class balancing in the later stage
 
 class ImageDataset(torch.utils.data.Dataset):
 
