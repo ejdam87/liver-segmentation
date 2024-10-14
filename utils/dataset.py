@@ -1,17 +1,7 @@
 import torch
-import numpy as np
-import torchvision.transforms as transforms
 from numpy.typing import NDArray
-from PIL import Image
 
-
-def get_image(path: str) -> torch.tensor:
-    """
-    Returns image located at <path> as tensor
-    """
-    im = Image.open(path)
-    transform = transforms.ToTensor()
-    return transform(im)
+from utils.im_handle import load_image
 
 # TODO -> try image patching and class balancing in the later stage
 
@@ -33,4 +23,4 @@ class ImageDataset(torch.utils.data.Dataset):
         """
         Returns i-th sample as a pair of input and expected output
         """
-        return get_image( self.X[i] ), get_image( self.Y[i] )
+        return load_image( self.X[i] ), load_image( self.Y[i] )
