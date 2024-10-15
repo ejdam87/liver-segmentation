@@ -5,9 +5,9 @@ import torch
 import torchmetrics
 import pandas as pd
 import numpy as np
+import torchmetrics.classification
 from typing import Any
 from torch.utils.data import DataLoader
-import torchmetrics.classification
 
 from models.unet import UNet
 from utils.dataset import ImageDataset
@@ -65,7 +65,7 @@ def main_train():
     train_dataset = ImageDataset(train_x, train_y)
     val_dataset = ImageDataset(val_x, val_y)
 
-    train_dataloader = DataLoader(train_dataset, batch_size=conf["train_batch_size"])
+    train_dataloader = DataLoader(train_dataset, batch_size=conf["train_batch_size"], shuffle=True)
     val_dataloader = DataLoader(val_dataset, batch_size=conf["valid_batch_size"])
 
     val_metrics = { m : METRIC_DICT[m] for m in conf["val_metrics"] }

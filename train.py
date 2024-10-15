@@ -3,6 +3,8 @@ import torch
 import torch.utils
 import torch.utils.data
 import torchmetrics
+from tqdm import tqdm
+
 
 def train_model(model: torch.nn.Module,
                 optimizer: torch.optim.Optimizer,
@@ -29,8 +31,9 @@ def train_model(model: torch.nn.Module,
 
     for epoch in range(epochs):
 
+        progress_bar = tqdm(train_data, desc=f"Epoch {epoch+1}/{epochs}")
         print(f"Starting epoch n.{epoch} of training...")
-        for X_batch, Y_batch in train_data:
+        for X_batch, Y_batch in progress_bar:
             optimizer.zero_grad()
             output = model(X_batch)
             l = loss(output, Y_batch)
