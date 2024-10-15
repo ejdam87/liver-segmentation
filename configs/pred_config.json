@@ -1,0 +1,8 @@
+{
+    "model"        : "unet",
+    "model_path"   : "",
+    "in_dim"         : 1,
+    "out_dim"        : 1,
+    "out_activation" : "sigmoid",
+    "image_in_path": ""
+}

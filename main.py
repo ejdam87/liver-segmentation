@@ -14,10 +14,12 @@ from utils.dataset import ImageDataset
 from utils.persistency import save_model, load_model
 from train import train_model
 from test import test_model
+from single_im import single_im_pred
 
 
 TRAIN_CONF = "./configs/train_config.json"
 TEST_CONF = "./configs/test_config.json"
+PRED_CONF = "./configs/pred_config.json"
 
 MODEL_DICT = {
     "unet": UNet
@@ -40,9 +42,11 @@ METRIC_DICT = {
     "recall": torchmetrics.classification.BinaryRecall
 }
 
+
 def load_conf(path: str) -> dict[str, Any]:
     with open(path, "r") as f:
         return json.load(f)
+
 
 def main_train():
     conf = load_conf(TRAIN_CONF)
@@ -76,6 +80,7 @@ def main_train():
     if conf["save_model"]:
         save_model(model, "trained_model.pth")
 
+
 def main_test():
     conf = load_conf(TRAIN_CONF)
     model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
@@ -91,7 +96,11 @@ def main_test():
 
 
 def main_pred():
-    print("Hello from pred")
+    conf = load_conf(PRED_CONF)
+    model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
+    load_model( model, conf["model_path"] )
+    single_im_pred(model, 0.5, conf["image_in_path"], "pred.png")
+
 
 if __name__ == "__main__":
 
