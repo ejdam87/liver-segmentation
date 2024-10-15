@@ -27,14 +27,14 @@ def train_model(model: torch.nn.Module,
     The function does not return anything, just modifies model's parameters.
     """
 
-    for epoch in epochs:
+    for epoch in range(epochs):
 
         print(f"Starting epoch n.{epoch} of training...")
         for X_batch, Y_batch in train_data:
             optimizer.zero_grad()
             output = model(X_batch)
             l = loss(output, Y_batch)
-            loss.backward()
+            l.backward()
             optimizer.step()
 
         print("Starting validation...")

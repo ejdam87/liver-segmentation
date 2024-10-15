@@ -8,7 +8,7 @@ class UNet(torch.nn.Sequential):
     Implementation based on: https://github.com/milesial/Pytorch-UNet (We modified it for our purposes)
     """
 
-    def __init__(self, in_channels: int, out_channels: int) -> None:
+    def __init__(self, in_channels: int, out_channels: int, out_activation: torch.nn.Module) -> None:
         """
         in_channels : # How many channels does the input image have (1 - grayscale, 3 - rgb)
         out_channels : How many channels does the output image have (same meaning as <in_channels>)
@@ -26,6 +26,8 @@ class UNet(torch.nn.Sequential):
         self.up_block_4 = UNetUpBlock(128, 64)
         self.output_block = torch.nn.Conv2d(64, out_channels, kernel_size=1)
 
+        self.out_activation = out_activation
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Evaluates U-Net
@@ -40,7 +42,8 @@ class UNet(torch.nn.Sequential):
         x = self.up_block_3(x, [x2])
         x = self.up_block_4(x, [x1])
         x = self.output_block(x)
-        return x
+
+        return self.out_activation(x)
 
 
 class UNetBaseBlock(torch.nn.Module):

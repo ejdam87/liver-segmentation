@@ -6,7 +6,7 @@ def load_image(path: str) -> torch.tensor:
     """
     Returns image located at <path> as tensor
     """
-    im = Image.open(path)
+    im = Image.open(path).convert('L')
     transform = transforms.ToTensor()
     return transform(im)
 

@@ -1,0 +1,17 @@
+{
+    "model"            : "unet",
+    "in_dim"           : 1,
+    "out_dim"          : 1,
+    "out_activation"   : "sigmoid",
+    "data_x_path"      : "data/train_x.csv",
+    "data_y_path"      : "data/train_y.csv",
+    "lr"               : 1e-5,
+    "optim"            : "adam",
+    "loss"             : "bce",
+    "train_batch_size" : 1,
+    "valid_batch_size" : 1,
+    "epochs"           : 10,
+    "validation_size"  : 0.2,
+    "val_metrics"      : ["accuracy", "recall"],
+    "save_model"       : true
+}

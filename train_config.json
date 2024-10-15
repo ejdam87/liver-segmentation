@@ -1,7 +1,0 @@
-{
-    "lr"         : 1e-5,
-    "optim"      : "adam",
-    "loss"       : "bce",
-    "batch_size": 1,
-    "epochs"    : 10
-}
