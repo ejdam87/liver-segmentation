@@ -1,4 +1,11 @@
 {
-    "model_path": "",
-    "metrics": ["accuracy", "recall"]
+    "model"          : "unet",
+    "in_dim"         : 1,
+    "out_dim"        : 1,
+    "out_activation" : "sigmoid",
+    "model_path"     : "",
+    "data_x_path"    : "",
+    "data_y_path"    : "",
+    "batch_size"     : 1,
+    "test_metrics"   : ["accuracy", "recall"]
 }

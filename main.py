@@ -11,8 +11,10 @@ from torch.utils.data import DataLoader
 
 from models.unet import UNet
 from utils.dataset import ImageDataset
-from utils.persistency import save_model
+from utils.persistency import save_model, load_model
 from train import train_model
+from test import test_model
+
 
 TRAIN_CONF = "./configs/train_config.json"
 TEST_CONF = "./configs/test_config.json"
@@ -75,7 +77,18 @@ def main_train():
         save_model(model, "trained_model.pth")
 
 def main_test():
-    print("Hello from test")
+    conf = load_conf(TRAIN_CONF)
+    model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
+    load_model( model, conf["model_path"] )
+
+    X = pd.read_csv( conf["data_x_path"] ).to_numpy()
+    Y = pd.read_csv( conf["data_y_path"] ).to_numpy()
+    test_dataset = ImageDataset(X, Y)
+    loader = DataLoader(test_dataset, batch_size=conf["batch_size"])
+    test_metrics = { m : METRIC_DICT[m] for m in conf["test_metrics"] }
+
+    test_model(model, loader, test_metrics)
+
 
 def main_pred():
     print("Hello from pred")

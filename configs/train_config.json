@@ -10,7 +10,7 @@
     "loss"             : "bce",
     "train_batch_size" : 1,
     "valid_batch_size" : 1,
-    "epochs"           : 10,
+    "epochs"           : 4,
     "validation_size"  : 0.2,
     "val_metrics"      : ["accuracy", "recall"],
     "save_model"       : true
