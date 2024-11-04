@@ -49,9 +49,15 @@ def load_conf(path: str) -> dict[str, Any]:
 
 
 def main_train():
+
+    # use GPU computing power if possible
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     conf = load_conf(TRAIN_CONF)
 
     model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
+    model = model.to(device)
+
     optim = OPTIM_DICT[conf["optim"]](model.parameters(), lr=conf["lr"])
     loss = LOSS_DICT[conf["loss"]]()
     X = pd.read_csv( conf["data_x_path"] ).to_numpy()
@@ -74,8 +80,8 @@ def main_train():
     train_dataloader = DataLoader(train_dataset, batch_size=conf["train_batch_size"], shuffle=True)
     val_dataloader = DataLoader(val_dataset, batch_size=conf["valid_batch_size"])
 
-    val_metrics = { m : METRIC_DICT[m] for m in conf["val_metrics"] }
-    train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics)
+    val_metrics = { m : METRIC_DICT[m]().to(device) for m in conf["val_metrics"] }
+    train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics, device)
 
     if conf["save_model"]:
         save_model(model, "trained_model.pth")

@@ -12,7 +12,8 @@ def train_model(model: torch.nn.Module,
                 val_data: torch.utils.data.DataLoader,
                 epochs: int,
                 loss: torch.nn.Module,
-                val_metrics: dict[ str, torchmetrics.Metric ]) -> None:
+                val_metrics: dict[ str, torchmetrics.Metric ],
+                device: str) -> None:
     """
     Main function for training models
 
@@ -34,9 +35,11 @@ def train_model(model: torch.nn.Module,
         progress_bar = tqdm(train_data, desc=f"Epoch {epoch+1}/{epochs}")
         print(f"Starting epoch n.{epoch} of training...")
         for X_batch, Y_batch in progress_bar:
+            X_batch_c, Y_batch_c = X_batch.to(device), Y_batch.to(device)
+
             optimizer.zero_grad()
-            output = model(X_batch)
-            l = loss(output, Y_batch)
+            output = model(X_batch_c)
+            l = loss(output, Y_batch_c)
             l.backward()
             optimizer.step()
 
@@ -46,10 +49,12 @@ def train_model(model: torch.nn.Module,
             n_batches = len(val_data)
 
             for X_batch, Y_batch in val_data:
-                pred = model(X_batch)
+                X_batch_c, Y_batch_c = X_batch.to(device), Y_batch.to(device)
+
+                pred = model(X_batch_c)
 
                 for name, metric in val_metrics.items():
-                    metric_values[name] += metric( pred, Y_batch )
+                    metric_values[name] += metric( pred, Y_batch_c )
 
             for name, val in metric_values.items():
                 print( f"{name} = {val / n_batches : .3f}" )
