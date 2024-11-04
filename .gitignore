@@ -4,6 +4,10 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
+__pycache__/
+*.py[cod]
+*$py.class
+
 # IPython
 profile_default/
 ipython_config.py
