@@ -1,5 +1,6 @@
 # main file (only this file should be run in the final version) serving as an interface for the user
 import sys
+import os
 import json
 import torch
 import torchmetrics
@@ -55,6 +56,8 @@ def main_train():
 
     conf = load_conf(TRAIN_CONF)
 
+    np.random.seed(conf["seed"])
+
     model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
     model = model.to(device)
 
@@ -81,10 +84,12 @@ def main_train():
     val_dataloader = DataLoader(val_dataset, batch_size=conf["valid_batch_size"])
 
     val_metrics = { m : METRIC_DICT[m]().to(device) for m in conf["val_metrics"] }
-    train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics, device)
+    vals = train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics, device)
 
     if conf["save_model"]:
-        save_model(model, "trained_model.pth")
+        os.makedirs("output", exist_ok=True)
+        save_model(model, "./output/trained_model.pth")
+        pd.DataFrame(vals).to_csv("./output/obt_values.csv")
 
 
 def main_test():
