@@ -76,7 +76,7 @@ def train_model(model: torch.nn.Module,
 
             for name, val in metric_values.items():
                 print( f"{name} = {val / val_n_batches : .3f}" )
-                metric_vals_epochs[name] = val / val_n_batches
+                metric_vals_epochs[name].append(val / val_n_batches)
 
         print()
     
