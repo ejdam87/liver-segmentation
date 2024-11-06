@@ -1,8 +1,9 @@
 {
     "model"        : "unet",
-    "model_path"   : "",
+    "model_path"   : "./train_output/trained_model.pth",
     "in_dim"         : 1,
     "out_dim"        : 1,
     "out_activation" : "sigmoid",
-    "image_in_path": ""
+    "threshold"      : 0.5,
+    "image_in_path": "./data/Images/000.png"
 }

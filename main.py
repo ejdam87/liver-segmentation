@@ -109,11 +109,15 @@ def main_test(device: str) -> None:
         os.makedirs("test_output", exist_ok=True)
         pd.DataFrame(vals).to_csv("./test_output/metric_values.csv")
 
-def main_pred():
+
+def main_pred(device: str) -> None:
     conf = load_conf(PRED_CONF)
     model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
     load_model( model, conf["model_path"] )
-    single_im_pred(model, 0.5, conf["image_in_path"], "pred.png")
+    model = model.to(device)
+
+    os.makedirs("pred_output", exist_ok=True)
+    single_im_pred(model, conf["threshold"], conf["image_in_path"], "./pred_output/pred.png", device)
 
 
 if __name__ == "__main__":
@@ -128,6 +132,6 @@ if __name__ == "__main__":
     elif sys.argv[1] == "test":
         main_test(device)
     elif sys.argv[1] == "pred":
-        main_pred()
+        main_pred(device)
     else:
         print("Option not recognized")
