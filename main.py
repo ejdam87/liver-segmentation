@@ -49,11 +49,7 @@ def load_conf(path: str) -> dict[str, Any]:
         return json.load(f)
 
 
-def main_train():
-
-    # use GPU computing power if possible
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+def main_train(device: str) -> None:
     conf = load_conf(TRAIN_CONF)
 
     np.random.seed(conf["seed"])
@@ -87,24 +83,27 @@ def main_train():
     vals = train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics, device)
 
     if conf["save_model"]:
-        os.makedirs("output", exist_ok=True)
-        save_model(model, "./output/trained_model.pth")
-        pd.DataFrame(vals).to_csv("./output/obt_values.csv")
+        os.makedirs("train_output", exist_ok=True)
+        save_model(model, "./train_output/trained_model.pth")
+        pd.DataFrame(vals).to_csv("./train_output/metric_values.csv")
 
 
-def main_test():
+def main_test(device: str) -> None:
     conf = load_conf(TRAIN_CONF)
     model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
     load_model( model, conf["model_path"] )
+    model = model.to(device)
 
     X = pd.read_csv( conf["data_x_path"] ).to_numpy()
     Y = pd.read_csv( conf["data_y_path"] ).to_numpy()
     test_dataset = ImageDataset(X, Y)
     loader = DataLoader(test_dataset, batch_size=conf["batch_size"])
-    test_metrics = { m : METRIC_DICT[m] for m in conf["test_metrics"] }
+    test_metrics = { m : METRIC_DICT[m].to(device) for m in conf["test_metrics"] }
 
-    test_model(model, loader, test_metrics)
-
+    vals = test_model(model, loader, test_metrics, device)
+    if conf["save_metrics"]:
+        os.makedirs("test_output", exist_ok=True)
+        pd.DataFrame(vals).to_csv("./test_output/metric_values.csv")
 
 def main_pred():
     conf = load_conf(PRED_CONF)
@@ -115,12 +114,15 @@ def main_pred():
 
 if __name__ == "__main__":
 
+    # use GPU computing power if possible
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     if len(sys.argv) == 1:
         print("provide one of the following arguments: train/test/pred")
     elif sys.argv[1] == "train":
-        main_train()
+        main_train(device)
     elif sys.argv[1] == "test":
-        main_test()
+        main_test(device)
     elif sys.argv[1] == "pred":
         main_pred()
     else:

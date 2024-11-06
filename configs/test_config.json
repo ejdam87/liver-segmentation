@@ -7,5 +7,6 @@
     "data_x_path"    : "",
     "data_y_path"    : "",
     "batch_size"     : 1,
-    "test_metrics"   : ["accuracy", "recall"]
+    "test_metrics"   : ["accuracy", "recall"],
+    "save_metrics"   : true
 }
