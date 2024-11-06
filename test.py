@@ -35,9 +35,9 @@ def test_model(model: torch.nn.Module,
             for name, metric in test_metrics.items():
                 metric_values[name] += metric( pred, Y_batch_c ).item()
 
-    metric_values = { name : val / n_batches for name, val in metric_values.items() }
+    metric_values = { name : [val / n_batches] for name, val in metric_values.items() }
 
     for name, val in metric_values.items():
-        print( f"{name} = {val : .3f}" )
+        print( f"{name} = {val[0] : .3f}" )
     
     return metric_values

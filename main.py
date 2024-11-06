@@ -89,16 +89,20 @@ def main_train(device: str) -> None:
 
 
 def main_test(device: str) -> None:
-    conf = load_conf(TRAIN_CONF)
+    conf = load_conf(TEST_CONF)
     model = MODEL_DICT[conf["model"]]( conf["in_dim"], conf["out_dim"],  ACTIVATION_DICT[ conf["out_activation"] ]() )
     load_model( model, conf["model_path"] )
     model = model.to(device)
 
     X = pd.read_csv( conf["data_x_path"] ).to_numpy()
     Y = pd.read_csv( conf["data_y_path"] ).to_numpy()
+
+    X = X[:, 0]
+    Y = Y[:, 0]
+
     test_dataset = ImageDataset(X, Y)
     loader = DataLoader(test_dataset, batch_size=conf["batch_size"])
-    test_metrics = { m : METRIC_DICT[m].to(device) for m in conf["test_metrics"] }
+    test_metrics = { m : METRIC_DICT[m]().to(device) for m in conf["test_metrics"] }
 
     vals = test_model(model, loader, test_metrics, device)
     if conf["save_metrics"]:
