@@ -1,1 +1,23 @@
- 
+# Liver segmentation
+This repository contains a pipeline for segmenting liver from grayscale CT scans.
+
+## Dependencies
+- [PyTorch](https://pytorch.org/) library for neural network building blocks
+- [NumPy](https://numpy.org/doc/) library for numerical computation
+- [Pandas](https://pandas.pydata.org/docs/) library for data manipulation
+- [Scikit-learn](https://scikit-learn.org/) library for train-test split
+- [TQDM](https://tqdm.github.io/) library for progress visualization
+- [Pillow](https://pillow.readthedocs.io/en/stable/) library for image processing
+
+We use [CUDA](https://developer.nvidia.com/cuda-toolkit) toolkit for GPU acceleration, thus, make sure to install the version of PyTorch supporting it.
+
+## Models
+As our main segmentation model, we use [U-Net](https://arxiv.org/abs/1505.04597) architecture.
+
+TODO - present baseline model
+
+## Data
+The data can be accessed via this [URL](https://drive.google.com/file/d/1nQ6Sh_Y8rbP_m6j2xUb7zvSV0-XY2d9c/view). They are axial human CT scans. The dataset contains both inputs and also corresponding anotated expected outputs (labels).
+
+## Results
+TODO - present results
