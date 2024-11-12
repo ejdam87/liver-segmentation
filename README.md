@@ -11,6 +11,11 @@ This repository contains a pipeline for segmenting liver from grayscale CT scans
 
 We use [CUDA](https://developer.nvidia.com/cuda-toolkit) toolkit for GPU acceleration, thus, make sure to install the version of PyTorch supporting it.
 
+## Execution
+- To run model training with train configuration in `configs` directory, execute `python main.py train`
+- To run model testing with test configuration in `configs` directory, execute `python main.py test`
+- To run model prediction with prediction configuration in `configs` directory, execute `python main.py pred`
+
 ## Models
 As our main segmentation model, we use [U-Net](https://arxiv.org/abs/1505.04597) architecture.
 
