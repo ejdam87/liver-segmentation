@@ -11,6 +11,7 @@ from typing import Any
 from torch.utils.data import DataLoader
 
 import utils.mpa as mpa
+import utils.miou as miou
 from models.unet import UNet
 from utils.dataset import ImageDataset
 from utils.persistency import save_model, load_model
@@ -41,7 +42,7 @@ OPTIM_DICT = {
 
 METRIC_DICT = {
     "mPA" : mpa.MeanPixelAccuracy(device="cuda" if torch.cuda.is_available() else "cpu"),
-    "mIoU": torchmetrics.classification.BinaryJaccardIndex()
+    "mIoU": miou.MeanIoU(device="cuda" if torch.cuda.is_available() else "cpu")
 }
 
 
@@ -69,8 +70,14 @@ def main_train(device: str) -> None:
     train_dataset = ImageDataset(train_x, train_y)
     val_dataset = ImageDataset(val_x, val_y)
 
-    train_dataloader = DataLoader(train_dataset, batch_size=conf["train_batch_size"], shuffle=True)
-    val_dataloader = DataLoader(val_dataset, batch_size=conf["valid_batch_size"])
+    train_dataloader = DataLoader(train_dataset,
+                                  batch_size=conf["train_batch_size"],
+                                  shuffle=True,
+                                  num_workers=conf["num_workers"])
+
+    val_dataloader = DataLoader(val_dataset,
+                                batch_size=conf["valid_batch_size"],
+                                num_workers=conf["num_workers"])
 
     val_metrics = { m : METRIC_DICT[m].to(device) for m in conf["val_metrics"] }
     vals = train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics, device)
