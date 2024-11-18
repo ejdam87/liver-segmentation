@@ -1,5 +1,5 @@
 {
-    "model"          : "unet",
+    "model"          : "baseline",
     "in_dim"         : 1,
     "out_dim"        : 1,
     "out_activation" : "sigmoid",
