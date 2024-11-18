@@ -6,10 +6,12 @@ import torch
 import torchmetrics
 import pandas as pd
 import numpy as np
+import torchmetrics.segmentation
 import torchmetrics.classification
 from typing import Any
 from torch.utils.data import DataLoader
 
+import utils.mpa as mpa
 from models.unet import UNet
 from utils.dataset import ImageDataset
 from utils.persistency import save_model, load_model
@@ -39,8 +41,8 @@ OPTIM_DICT = {
 }
 
 METRIC_DICT = {
-    "accuracy": torchmetrics.classification.BinaryAccuracy,
-    "recall": torchmetrics.classification.BinaryRecall
+    "mPA" : mpa.MeanPixelAccuracy(),
+    "mIoU": torchmetrics.segmentation.MeanIoU(num_classes=2)
 }
 
 
@@ -59,19 +61,11 @@ def main_train(device: str) -> None:
 
     optim = OPTIM_DICT[conf["optim"]](model.parameters(), lr=conf["lr"])
     loss = LOSS_DICT[conf["loss"]]()
-    X = pd.read_csv( conf["data_x_path"] ).to_numpy()
-    Y = pd.read_csv( conf["data_y_path"] ).to_numpy()
 
-    # --- Shuffling and splitting training data into train and validation sets
-    data = np.column_stack( (X, Y) )
-    np.random.shuffle(data)
-    split_index = int( conf["validation_size"] * len(data) )
-
-    val_x = data[:split_index, 0]
-    val_y = data[:split_index, 1]
-    train_x = data[split_index:, 0]
-    train_y = data[split_index:, 1]
-    # ---
+    train_x = pd.read_csv( conf["tdata_x_path"] ).to_numpy()[:, 0]
+    train_y = pd.read_csv( conf["tdata_y_path"] ).to_numpy()[:, 0]
+    val_x = pd.read_csv( conf["vdata_x_path"] ).to_numpy()[:, 0]
+    val_y = pd.read_csv( conf["vdata_y_path"] ).to_numpy()[:, 0]
 
     train_dataset = ImageDataset(train_x, train_y)
     val_dataset = ImageDataset(val_x, val_y)
@@ -79,7 +73,7 @@ def main_train(device: str) -> None:
     train_dataloader = DataLoader(train_dataset, batch_size=conf["train_batch_size"], shuffle=True)
     val_dataloader = DataLoader(val_dataset, batch_size=conf["valid_batch_size"])
 
-    val_metrics = { m : METRIC_DICT[m]().to(device) for m in conf["val_metrics"] }
+    val_metrics = { m : METRIC_DICT[m].to(device) for m in conf["val_metrics"] }
     vals = train_model(model, optim, train_dataloader, val_dataloader, conf["epochs"], loss, val_metrics, device)
 
     if conf["save_model"]:
@@ -102,7 +96,7 @@ def main_test(device: str) -> None:
 
     test_dataset = ImageDataset(X, Y)
     loader = DataLoader(test_dataset, batch_size=conf["batch_size"])
-    test_metrics = { m : METRIC_DICT[m]().to(device) for m in conf["test_metrics"] }
+    test_metrics = { m : METRIC_DICT[m].to(device) for m in conf["test_metrics"] }
 
     vals = test_model(model, loader, test_metrics, device)
     if conf["save_metrics"]:
