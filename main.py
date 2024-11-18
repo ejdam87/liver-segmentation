@@ -6,7 +6,6 @@ import torch
 import torchmetrics
 import pandas as pd
 import numpy as np
-import torchmetrics.segmentation
 import torchmetrics.classification
 from typing import Any
 from torch.utils.data import DataLoader
@@ -41,8 +40,8 @@ OPTIM_DICT = {
 }
 
 METRIC_DICT = {
-    "mPA" : mpa.MeanPixelAccuracy(),
-    "mIoU": torchmetrics.segmentation.MeanIoU(num_classes=2)
+    "mPA" : mpa.MeanPixelAccuracy(device="cuda" if torch.cuda.is_available() else "cpu"),
+    "mIoU": torchmetrics.classification.BinaryJaccardIndex()
 }
 
 

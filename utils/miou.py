@@ -2,7 +2,7 @@ import torch
 import torchmetrics
 import torchmetrics.classification
 
-class MeanPixelAccuracy(torchmetrics.Metric):
+class MeanIoU(torchmetrics.Metric):
     def __init__(self, device, **kwargs):
         super().__init__(**kwargs)
         self.add_state("conf_matrix", default=torch.zeros(2, 2), dist_reduce_fx="sum")
@@ -17,4 +17,4 @@ class MeanPixelAccuracy(torchmetrics.Metric):
 
     def compute(self) -> torch.Tensor:
         TN, FP, FN, TP = self.conf_matrix.flatten()
-        return 1 / 2 * ( (TP / (TP + FN)) + (TN / (TN + FP)) )
+        return 1 / 2 * ( (TP / (TP + FP + FN)) + (TN / (TN + FP + FN)) )
