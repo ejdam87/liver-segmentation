@@ -117,7 +117,7 @@ def main_pred(device: str) -> None:
     model = model.to(device)
 
     os.makedirs("pred_output", exist_ok=True)
-    single_im_pred(model, conf["threshold"], conf["image_in_path"], "./pred_output/pred.png", device)
+    single_im_pred(model, conf["threshold"], conf["image_in_path"], conf["image_out_path"], device)
 
 
 if __name__ == "__main__":

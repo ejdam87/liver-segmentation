@@ -7,6 +7,6 @@
     "data_x_path"    : "data/test_x.csv",
     "data_y_path"    : "data/test_y.csv",
     "batch_size"     : 1,
-    "test_metrics"   : ["accuracy", "recall"],
+    "test_metrics"   : ["mPA", "mIoU"],
     "save_metrics"   : true
 }
