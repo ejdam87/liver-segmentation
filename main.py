@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader
 import utils.mpa as mpa
 import utils.miou as miou
 from models.unet import UNet
+from models.baseline import BaselineCNN
 from utils.dataset import ImageDataset
 from utils.persistency import save_model, load_model
 from train import train_model
@@ -25,7 +26,8 @@ TEST_CONF = "./configs/test_config.json"
 PRED_CONF = "./configs/pred_config.json"
 
 MODEL_DICT = {
-    "unet": UNet
+    "unet": UNet,
+    "baseline": BaselineCNN,
 }
 
 LOSS_DICT = {
