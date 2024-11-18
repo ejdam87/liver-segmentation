@@ -8,7 +8,6 @@ class MeanPixelAccuracy(torchmetrics.Metric):
         self.add_state("conf_matrix", default=torch.zeros(2, 2), dist_reduce_fx="sum")
 
     def update(self, preds: torch.Tensor, target: torch.Tensor) -> None:
-        preds, target = self._input_format(preds, target)
         if preds.shape != target.shape:
             raise ValueError("preds and target must have the same shape")
 
