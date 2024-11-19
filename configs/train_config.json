@@ -12,7 +12,7 @@
     "loss"             : "bce",
     "train_batch_size" : 1,
     "valid_batch_size" : 1,
-    "epochs"           : 10,
+    "epochs"           : 7,
     "val_metrics"      : ["mPA", "mIoU"],
     "save_model"       : true,
     "seed"             : 42,

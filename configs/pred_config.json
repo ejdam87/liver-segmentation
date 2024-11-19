@@ -5,6 +5,6 @@
     "out_dim"        : 1,
     "out_activation" : "sigmoid",
     "threshold"      : 0.5,
-    "image_in_path": "./data/Images/033.png",
-    "image_out_path": "./pred_output/033_pred.png"
+    "image_in_path": "./data/Images/209.png",
+    "image_out_path": "./pred_output/209_pred.png"
 }

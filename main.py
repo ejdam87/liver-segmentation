@@ -3,10 +3,8 @@ import sys
 import os
 import json
 import torch
-import torchmetrics
 import pandas as pd
 import numpy as np
-import torchmetrics.classification
 from typing import Any
 from torch.utils.data import DataLoader
 
