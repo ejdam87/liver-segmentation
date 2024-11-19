@@ -1,5 +1,5 @@
 {
-    "model"            : "baseline",
+    "model"            : "unet",
     "in_dim"           : 1,
     "out_dim"          : 1,
     "out_activation"   : "sigmoid",
@@ -12,7 +12,7 @@
     "loss"             : "bce",
     "train_batch_size" : 1,
     "valid_batch_size" : 1,
-    "epochs"           : 7,
+    "epochs"           : 10,
     "val_metrics"      : ["mPA", "mIoU"],
     "save_model"       : true,
     "seed"             : 42,
