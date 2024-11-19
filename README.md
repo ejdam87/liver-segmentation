@@ -19,7 +19,7 @@ We use [CUDA](https://developer.nvidia.com/cuda-toolkit) toolkit for GPU acceler
 ## Models
 As our main segmentation model, we use [U-Net](https://arxiv.org/abs/1505.04597) architecture.
 
-TODO - present baseline model
+As our baseline model, we use a CNN architecture, with a succession of 3x3 convolutional layers (associated with ReLU) and pooling layers. The last layers does upsample, convolution 1x1 and activation function.
 
 ## Data
 The data can be accessed via this [URL](https://drive.google.com/file/d/1nQ6Sh_Y8rbP_m6j2xUb7zvSV0-XY2d9c/view). They are axial human CT scans. The dataset contains both inputs and also corresponding anotated expected outputs (labels).
