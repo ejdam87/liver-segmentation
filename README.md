@@ -11,6 +11,8 @@ This repository contains a pipeline for segmenting liver from grayscale CT scans
 
 We use [CUDA](https://developer.nvidia.com/cuda-toolkit) toolkit for GPU acceleration, thus, make sure to install the version of PyTorch supporting it.
 
+Finally, the dependencies could be installed using `pip` package manager with the following: `pip install -r requirements.txt` in the root directory of the project.
+
 ## Execution
 - To run model training with train configuration in `configs` directory, execute `python main.py train`
 - To run model testing with test configuration in `configs` directory, execute `python main.py test`
