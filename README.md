@@ -25,4 +25,4 @@ As our baseline model, we use a CNN architecture, with a succession of 3x3 convo
 The data can be accessed via this [URL](https://drive.google.com/file/d/1nQ6Sh_Y8rbP_m6j2xUb7zvSV0-XY2d9c/view). They are axial human CT scans. The dataset contains both inputs and also corresponding anotated expected outputs (labels).
 
 ## Results
-TODO - present results
+Results are presented in `report.pdf` in great detail.
